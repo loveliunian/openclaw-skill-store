@@ -7,5 +7,9 @@ services:
       - "5050:5050"
     environment:
       - FLASK_ENV=production
+      - DATABASE=/app/data/skills.db
     volumes:
-      - ./skills.db:/app/skills.db
+      - skill-data:/app/data
+
+volumes:
+  skill-data:
