@@ -60,5 +60,38 @@ def skill_detail(skill_id):
     return render_template('skill_detail.html', skill=skill)
 
 
+@app.route('/skills/submit', methods=['GET', 'POST'])
+def skill_submit():
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        description = request.form.get('description', '').strip()
+        if not name or not description:
+            return render_template('submit.html', error='名称和描述为必填项',
+                                   name=name, description=description,
+                                   category=request.form.get('category', '').strip(),
+                                   author=request.form.get('author', '').strip(),
+                                   install_cmd=request.form.get('install_cmd', '').strip(),
+                                   homepage=request.form.get('homepage', '').strip(),
+                                   emoji=request.form.get('emoji', '🔧').strip())
+
+        db = get_db()
+        db.execute("""
+            INSERT INTO skills (name, description, category, author, install_cmd, homepage, emoji)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (
+            name, description,
+            request.form.get('category', '其他').strip(),
+            request.form.get('author', '').strip(),
+            request.form.get('install_cmd', '').strip(),
+            request.form.get('homepage', '').strip(),
+            request.form.get('emoji', '🔧').strip()
+        ))
+        db.commit()
+        skill_id = db.execute("SELECT last_insert_rowid()").fetchone()[0]
+        return redirect(url_for('skill_detail', skill_id=skill_id))
+
+    return render_template('submit.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5050)

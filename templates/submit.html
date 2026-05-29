@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}提交技能 — OpenClaw Skill Store{% endblock %}
+
+{% block content %}
+<section class="submit-section">
+    <h1 class="submit-title">提交新技能</h1>
+    <p class="submit-subtitle">分享你的 OpenClaw 技能给社区</p>
+
+    {% if error %}
+    <div class="submit-error">
+        ⚠️ {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="post" action="/skills/submit" class="submit-form">
+        <div class="form-group">
+            <label for="name" class="form-label">名称 <span class="required">*</span></label>
+            <input
+                type="text"
+                id="name"
+                name="name"
+                class="form-input"
+                placeholder="例如: my-awesome-skill"
+                value="{{ name or '' }}"
+                required
+                autofocus
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="description" class="form-label">描述 <span class="required">*</span></label>
+            <textarea
+                id="description"
+                name="description"
+                class="form-textarea"
+                placeholder="描述这个技能的功能..."
+                rows="4"
+                required
+            >{{ description or '' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="category" class="form-label">分类</label>
+            <select id="category" name="category" class="form-select">
+                <option value="">— 请选择 —</option>
+                {% set cats = ['开发', '效率', '安全', '社交', '创作', 'AI', '其他'] %}
+                {% for cat in cats %}
+                <option value="{{ cat }}" {% if category == cat %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="author" class="form-label">作者</label>
+            <input
+                type="text"
+                id="author"
+                name="author"
+                class="form-input"
+                placeholder="你的名字或 GitHub 用户名"
+                value="{{ author or '' }}"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="install_cmd" class="form-label">安装命令</label>
+            <input
+                type="text"
+                id="install_cmd"
+                name="install_cmd"
+                class="form-input"
+                placeholder="例如: openclaw install my-skill"
+                value="{{ install_cmd or '' }}"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="homepage" class="form-label">项目主页</label>
+            <input
+                type="url"
+                id="homepage"
+                name="homepage"
+                class="form-input"
+                placeholder="https://github.com/user/repo"
+                value="{{ homepage or '' }}"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="emoji" class="form-label">Emoji</label>
+            <input
+                type="text"
+                id="emoji"
+                name="emoji"
+                class="form-input form-input-short"
+                placeholder="🔧"
+                value="{{ emoji or '🔧' }}"
+                maxlength="8"
+            >
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">提交技能</button>
+            <a href="{{ url_for('index') }}" class="btn-cancel">取消</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

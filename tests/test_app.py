@@ -124,3 +124,52 @@ def test_index_shows_stats(client):
     html = response.data.decode('utf-8')
     # 应有 3 个技能
     assert '3' in html
+
+
+# ============================================================
+# 技能提交功能测试 (Task 6)
+# ============================================================
+
+def test_submit_page_returns_200(client):
+    """GET /skills/submit 应返回 200"""
+    response = client.get('/skills/submit')
+    assert response.status_code == 200
+
+
+def test_submit_page_has_form(client):
+    """提交页面应包含表单"""
+    response = client.get('/skills/submit')
+    html = response.data.decode('utf-8')
+    assert '<form' in html
+    assert 'name="name"' in html
+    assert 'name="description"' in html
+
+
+def test_submit_creates_skill(client):
+    """POST 提交创建 Skill 并重定向到详情页"""
+    response = client.post('/skills/submit', data={
+        'name': 'new-skill',
+        'description': 'A brand new skill',
+        'category': '开发',
+        'author': 'NewAuthor',
+        'install_cmd': 'pip install new',
+        'homepage': 'https://example.com/new',
+        'emoji': '🆕',
+    }, follow_redirects=True)
+    assert response.status_code == 200
+    html = response.data.decode('utf-8')
+    assert 'new-skill' in html
+    assert 'A brand new skill' in html
+    assert 'NewAuthor' in html
+
+
+def test_submit_empty_name_shows_error(client):
+    """空名称提交应返回错误提示"""
+    response = client.post('/skills/submit', data={
+        'name': '',
+        'description': 'Some description',
+    })
+    assert response.status_code == 200
+    html = response.data.decode('utf-8')
+    assert '名称' in html
+    assert '<form' in html  # 仍然显示表单
