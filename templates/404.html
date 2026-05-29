@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}404 — 技能未找到 | OpenClaw Skill Store{% endblock %}
+
+{% block content %}
+<div class="empty-state">
+    <div class="empty-state-icon">🔍</div>
+    <p class="empty-state-text">技能未找到</p>
+    <p class="empty-state-hint">你查找的技能不存在或已被移除。</p>
+    <p style="margin-top: 16px;">
+        <a href="{{ url_for('index') }}">← 返回首页</a>
+    </p>
+</div>
+{% endblock %}

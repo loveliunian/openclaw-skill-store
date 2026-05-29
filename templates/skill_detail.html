@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}{{ skill.name }} — OpenClaw Skill Store{% endblock %}
+
+{% block content %}
+<!-- 返回链接 -->
+<a href="{{ url_for('index') }}" class="back-link">← 返回技能列表</a>
+
+<!-- 技能详情 -->
+<article class="skill-detail">
+    <div class="skill-detail-header">
+        <div class="skill-detail-icon">{{ skill.emoji }}</div>
+        <div>
+            <h1 class="skill-detail-title">{{ skill.name }}</h1>
+            {% if skill.category %}
+            <span class="skill-category-tag">{{ skill.category }}</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <p class="skill-detail-description">{{ skill.description }}</p>
+
+    <div class="skill-detail-meta">
+        {% if skill.author %}
+        <div class="meta-item">
+            <span class="meta-label">作者</span>
+            <span class="meta-value">{{ skill.author }}</span>
+        </div>
+        {% endif %}
+        <div class="meta-item">
+            <span class="meta-label">下载量</span>
+            <span class="meta-value">📥 {{ skill.downloads }}</span>
+        </div>
+        <div class="meta-item">
+            <span class="meta-label">添加时间</span>
+            <span class="meta-value">{{ skill.created_at }}</span>
+        </div>
+    </div>
+
+    {% if skill.install_cmd %}
+    <div class="skill-detail-install">
+        <h3>安装命令</h3>
+        <pre><code>{{ skill.install_cmd }}</code></pre>
+    </div>
+    {% endif %}
+
+    {% if skill.homepage %}
+    <div class="skill-detail-homepage">
+        <a href="{{ skill.homepage }}" target="_blank" rel="noopener">🔗 访问项目主页</a>
+    </div>
+    {% endif %}
+</article>
+{% endblock %}
