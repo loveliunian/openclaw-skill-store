@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    container_name: openclaw-skill-store
+    restart: always
+    ports:
+      - "5050:5050"
+    environment:
+      - FLASK_ENV=production
+    volumes:
+      - ./skills.db:/app/skills.db
